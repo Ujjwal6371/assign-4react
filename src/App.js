@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css'; // Import your CSS for styling
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the API
+    axios.get('https://dummyjson.com/users')
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>User Table</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
